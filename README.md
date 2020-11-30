@@ -19,17 +19,6 @@ Want to know more about the game? Then play it.
   - Background : https://ansimuz.itch.io/space-background
   - Soundtrack : https://opengameart.org/content/adventure-begins
 
-### Installation
-
-
-Windows:
-
-```sh
-1. Install Gun-Vs-Magic.zip
-2. Extract the zip files
-3. Go to GunVsMagic folder
-4. Double click the GunVsMagic.exe
-```
    [dill]: <https://github.com/joemccann/dillinger>
    [git-repo-url]: <https://github.com/joemccann/dillinger.git>
    [john gruber]: <http://daringfireball.net>
