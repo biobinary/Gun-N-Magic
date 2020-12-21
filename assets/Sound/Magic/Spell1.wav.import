@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Spell1.wav-971884945f1139d1a5f1f6743a93db40.sample"
+
+[deps]
+
+source_file="res://assets/Sound/Magic/Spell1.wav"
+dest_files=[ "res://.import/Spell1.wav-971884945f1139d1a5f1f6743a93db40.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

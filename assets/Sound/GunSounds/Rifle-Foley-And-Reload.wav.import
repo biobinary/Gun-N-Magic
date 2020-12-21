@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Rifle-Foley-And-Reload.wav-71f892bb2b5fad685d1a03ed133d69f7.sample"
+
+[deps]
+
+source_file="res://assets/Sound/GunSounds/Rifle-Foley-And-Reload.wav"
+dest_files=[ "res://.import/Rifle-Foley-And-Reload.wav-71f892bb2b5fad685d1a03ed133d69f7.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
