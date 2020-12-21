@@ -1,0 +1,126 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/TileSet/Crate/CrateSmall.png" type="Texture" id=1]
+[ext_resource path="res://src/WorldObjects-Decoration/Script/ObjectsHurtScript.gd" type="Script" id=2]
+[ext_resource path="res://assets/Shaders/FlashingShader.tres" type="Material" id=3]
+[ext_resource path="res://assets/NormalMap/CrateSmall_n.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8, 9.02568 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "Destroyed"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CollisionShape2D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.994982 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "queue_free"
+} ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../HurtBox/CollisionShape2D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("..:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("CrateSprite:material:shader_param/whitening")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Hit"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/path = NodePath("CrateSprite:material:shader_param/whitening")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 1.0, 0.0 ]
+}
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 8, 10 )
+
+[node name="CrateSmall" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 3
+
+[node name="CrateSprite" type="Sprite" parent="StaticBody2D"]
+material = ExtResource( 3 )
+texture = ExtResource( 1 )
+normal_map = ExtResource( 4 )
+centered = false
+region_rect = Rect2( 112, 0, 16, 32 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+visible = false
+position = Vector2( 8, 22 )
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StaticBody2D"]
+anims/Destroyed = SubResource( 2 )
+anims/Hit = SubResource( 3 )
+
+[node name="HurtBox" type="Area2D" parent="." groups=[
+"Destroyable",
+]]
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+visible = false
+modulate = Color( 0.545098, 1, 0, 1 )
+position = Vector2( 8, 22 )
+shape = SubResource( 4 )

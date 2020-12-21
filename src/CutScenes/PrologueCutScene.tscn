@@ -1,0 +1,561 @@
+[gd_scene load_steps=27 format=2]
+
+[ext_resource path="res://assets/Background/parallax-space-stars.png" type="Texture" id=1]
+[ext_resource path="res://src/WorldObjects-Decoration/Torch/Torch.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/WorldObjects-Decoration/Crate/CrateSmall.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/WorldObjects-Decoration/Crate/CrateBig.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/WorldObjects-Decoration/Barrel/Barrel.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/WorldObjects-Decoration/Flag/FlagObject.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/Player/PlayerNode-CutScene.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/TileSet/TileSet/FloorTileSet.tres" type="TileSet" id=8]
+[ext_resource path="res://assets/TileSet/TileSet/WallTileSet.tres" type="TileSet" id=9]
+[ext_resource path="res://assets/FontData/ThaleahFat.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://src/CutScenes/Script/CutSceneScript.gd" type="Script" id=11]
+[ext_resource path="res://src/Wizard/DumbWizzard-CutScene.tscn" type="PackedScene" id=12]
+[ext_resource path="res://src/WorldObjects-Decoration/BookSelf/Bookself.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/WorldObjects-Decoration/Table/DiningTable.tscn" type="PackedScene" id=14]
+[ext_resource path="res://assets/Sound/DialogueSounds/ActorDialogSound.wav" type="AudioStream" id=15]
+
+[sub_resource type="Environment" id=1]
+background_mode = 4
+ssao_intensity = 2.0
+glow_enabled = true
+glow_levels/1 = true
+glow_strength = 0.5
+glow_blend_mode = 0
+glow_bicubic_upscale = true
+adjustment_enabled = true
+
+[sub_resource type="Animation" id=2]
+resource_name = "DefaultMainAnimation"
+length = 8.25
+tracks/0/type = "method"
+tracks/0/path = NodePath("TransitionAnimation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [ "Open" ],
+"method": "play"
+}, {
+"args": [ "Close" ],
+"method": "play"
+} ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("PlayerAnimation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1.15, 2.5, 3.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [ "FocusToPlayer" ],
+"method": "play"
+}, {
+"args": [ "FocusToWizard" ],
+"method": "play"
+}, {
+"args": [ "PlayerCatchUpWizzard" ],
+"method": "play"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 2.25, 6.7, 8.24255 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [ 0 ],
+"method": "_do_show_dialog"
+}, {
+"args": [ 1 ],
+"method": "_do_show_dialog"
+}, {
+"args": [  ],
+"method": "_cutscene_is_over"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../YSort/DumbWizzard-CutScene:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Close"
+tracks/0/type = "value"
+tracks/0/path = NodePath("../TransitionLayer/ColorRect:material:shader_param/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.5 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Open"
+tracks/0/type = "value"
+tracks/0/path = NodePath("../TransitionLayer/ColorRect:material:shader_param/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.5, 0.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "FocusToPlayer"
+tracks/0/type = "value"
+tracks/0/path = NodePath("../CutSceneCamera:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.6, 0.6 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "FocusToWizard"
+tracks/0/type = "value"
+tracks/0/path = NodePath("../YSort/DumbWizzard-CutScene:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../CutSceneCamera:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 166 ), Vector2( 232, 70 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "PlayerCatchUpWizzard"
+length = 2.5
+tracks/0/type = "method"
+tracks/0/path = NodePath("../YSort/PlayerNodeCutScene/PlayerAnimation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2.49394 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [ "WalkingAnimation" ],
+"method": "play"
+}, {
+"args": [ "IdleAnimation" ],
+"method": "play"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../YSort/PlayerNodeCutScene:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.5, 2.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 166 ), Vector2( 159, 77 ), Vector2( 197, 71 ) ]
+}
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+// An input into the shader from our game code.
+// Ranges from 0 to 1 over the course of the transition.
+// We use this to actually animate the shader.
+uniform float progress : hint_range(0, 1);
+
+// Size of each diamond, in pixels.
+uniform float diamondPixelSize = 10f;
+
+void fragment() {
+    float xFraction = fract(FRAGCOORD.x / diamondPixelSize);
+    float yFraction = fract(FRAGCOORD.y / diamondPixelSize);
+    
+    float xDistance = abs(xFraction - 0.5);
+    float yDistance = abs(yFraction - 0.5);
+    
+    if (xDistance + yDistance > progress * 2f) {
+        discard;
+    }
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
+shader_param/progress = 0.5
+shader_param/diamondPixelSize = 20.0
+
+[sub_resource type="DynamicFont" id=10]
+size = 14
+font_data = ExtResource( 10 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 14
+font_data = ExtResource( 10 )
+
+[node name="PrologueCutScene" type="Node2D"]
+pause_mode = 2
+script = ExtResource( 11 )
+next_objective = "Kill The Wizard"
+next_scene = "res://src/World/PrologueWorld/PrologueWorld.tscn"
+dialog_dict = {
+0: [ {
+"actor": "Player",
+"color": "22ffea",
+"dialog": "Ah yes, here we go again, another game jam in the worse year ever. [enter] "
+}, {
+"actor": "Player",
+"color": "22ffea",
+"dialog": "This time i joined the Game Off 2020 with the theme 'MoonShot'. [enter] "
+}, {
+"actor": "Player",
+"color": "22ffea",
+"dialog": "Yes of course, a very cheesy theme. [enter] "
+}, {
+"actor": "Player",
+"color": "22ffea",
+"dialog": "Now everyone is going to make a very boring asteroid shooting game. [enter] "
+}, {
+"actor": "wizzard",
+"color": Color( 0.396078, 0.364706, 0.564706, 1 ),
+"dialog": "And what about you? young man. [enter]"
+}, {
+"actor": "Player",
+"color": "22ffea",
+"dialog": "wait wut? [enter]"
+} ],
+1: [ {
+"actor": "Player",
+"color": "22ffea",
+"dialog": "who the heck are you? [enter]"
+}, {
+"actor": "wizzard",
+"color": Color( 0.247059, 0.207843, 0.419608, 1 ),
+"dialog": "I am an old wizard, young man. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "Then where are you from old man. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "are you from hogwarts? [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "Of course not, moron. [enter]"
+}, {
+"actor": "wizard",
+"color": "3f356b",
+"dialog": "I come from Pee Pee Township. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "Is that even a place name? more like your mom's name. [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "Well, I didn't expect that one. [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "By the way I heard you wanted to find an idea for a game jam. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "actually, yes, I'm looking for an idea. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "Do you have an idea for me? [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "Yes, very strange young man, I have an idea for you. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "Noice, so what idea do you want to give me? [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "Of course a space shooter games, you moron. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "Damn it, you're not as wise as it looks. But it gave me an idea. [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "What idea is it young man? [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "I'm going to kill all the wizards in this dungeon. [enter]"
+}, {
+"actor": "wizzard",
+"color": "3f356b",
+"dialog": "it is absolutely impossible. But if that's what you want then you have to defeat me first. [enter]"
+}, {
+"actor": "player",
+"color": "22ffea",
+"dialog": "Ok, old man. [enter]"
+} ]
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 1 )
+
+[node name="WorldCanvasModulate" type="CanvasModulate" parent="."]
+color = Color( 0.513726, 0.513726, 0.513726, 1 )
+
+[node name="AnimationNode" type="Node" parent="."]
+
+[node name="MainAnimation" type="AnimationPlayer" parent="AnimationNode"]
+autoplay = "DefaultMainAnimation"
+anims/DefaultMainAnimation = SubResource( 2 )
+
+[node name="TransitionAnimation" type="AnimationPlayer" parent="AnimationNode"]
+anims/Close = SubResource( 3 )
+anims/Open = SubResource( 4 )
+
+[node name="PlayerAnimation" type="AnimationPlayer" parent="AnimationNode"]
+anims/FocusToPlayer = SubResource( 5 )
+anims/FocusToWizard = SubResource( 6 )
+anims/PlayerCatchUpWizzard = SubResource( 7 )
+
+[node name="DialogTween" type="Tween" parent="AnimationNode"]
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="ColorRect" type="ColorRect" parent="TransitionLayer"]
+material = SubResource( 9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DialogLayer" type="CanvasLayer" parent="."]
+layer = 15
+
+[node name="DialogPopup" type="Popup" parent="DialogLayer"]
+anchor_top = 0.833
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 0.0799866
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="DialogLayer/DialogPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0980392, 0.0980392, 0.0980392, 0.784314 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="DialogLayer/DialogPopup/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 2
+custom_constants/margin_left = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DialogLayer/DialogPopup/ColorRect/MarginContainer"]
+margin_left = 5.0
+margin_top = 2.0
+margin_right = 315.0
+margin_bottom = 40.0
+
+[node name="ActorName" type="Label" parent="DialogLayer/DialogPopup/ColorRect/MarginContainer/VBoxContainer"]
+margin_right = 310.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 10 )
+custom_colors/font_color = Color( 0.133333, 1, 0.917647, 1 )
+
+[node name="Dialog" type="Label" parent="DialogLayer/DialogPopup/ColorRect/MarginContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 310.0
+margin_bottom = 38.0
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 11 )
+autowrap = true
+
+[node name="ActorDialogSound" type="AudioStreamPlayer" parent="DialogLayer"]
+stream = ExtResource( 15 )
+
+[node name="CinematicEffectLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="TopLayer" type="ColorRect" parent="CinematicEffectLayer"]
+anchor_right = 1.0
+margin_bottom = 16.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BottomLayer" type="ColorRect" parent="CinematicEffectLayer"]
+anchor_top = 0.933
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 0.0800018
+margin_bottom = 1.52588e-05
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Backgroundlayer" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Backgroundlayer"]
+motion_scale = Vector2( 0.7, 0.7 )
+motion_mirroring = Vector2( 512, 288 )
+
+[node name="parallax-space-stars" type="Sprite" parent="Backgroundlayer/ParallaxLayer"]
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 512, 288 )
+
+[node name="FloorTileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 8 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 131073, 0, 0, 131074, 0, 0, 131075, 3, 0, 131076, 0, 0, 131077, 0, 0, 131078, 0, 0, 131079, 0, 0, 131080, 2, 0, 131083, 0, 0, 131084, 0, 0, 131085, 7, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131089, 0, 0, 131090, 0, 0, 196609, 7, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 196616, 0, 0, 196617, -1610612734, 0, 196618, 0, 0, 196619, 0, 0, 196620, 0, 0, 196621, 0, 0, 196622, 0, 0, 196623, 0, 0, 196624, 0, 0, 196625, 4, 0, 196626, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 262153, 0, 0, 262154, 4, 0, 262155, 0, 0, 262156, 0, 0, 262157, 0, 0, 262158, 0, 0, 262159, 0, 0, 262160, 0, 0, 262161, 0, 0, 262162, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 1, 0, 327686, 0, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 327691, 0, 0, 327692, 0, 0, 327693, 0, 0, 327694, 0, 0, 327695, 0, 0, 327696, 0, 0, 327697, 0, 0, 327698, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0, 393222, 0, 0, 393223, 0, 0, 393224, 0, 0, 393225, 0, 0, 393226, 0, 0, 393227, 0, 0, 393228, 0, 0, 393229, 0, 0, 393230, 0, 0, 393231, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 524296, 0, 0, 524297, 0, 0, 524298, 0, 0, 524299, 0, 0, 589832, 0, 0, 589833, 0, 0, 589834, 0, 0, 589835, 0, 0, 655361, 0, 0, 655362, 0, 0, 655363, 0, 0, 655364, 0, 0, 655365, 0, 0, 655366, 0, 0, 655367, 0, 0, 655368, 0, 0, 655369, 0, 0, 655370, 0, 0, 655371, 0, 0, 655372, 0, 0, 655373, 0, 0, 655374, 0, 0, 655375, 0, 0, 655376, 0, 0, 655377, 0, 0, 655378, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720901, 0, 0, 720902, 0, 0, 720903, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 720909, 0, 0, 720910, 0, 0, 720911, 0, 0, 720912, 0, 0, 720913, 0, 0, 720914, 0, 0, 786433, 0, 0, 786434, 0, 0, 786435, 0, 0, 786436, 0, 0, 786437, 0, 0, 786438, 0, 0, 786439, 0, 0, 786440, 0, 0, 786441, 0, 0, 786442, 0, 0, 786443, 0, 0, 786444, 0, 0, 786445, 0, 0, 786446, 0, 0, 786447, 0, 0, 786448, 0, 0, 786449, 0, 0, 786450, 0, 0 )
+
+[node name="YSort" type="YSort" parent="."]
+
+[node name="Wall" type="TileMap" parent="YSort" groups=[
+"Destroyable",
+]]
+tile_set = ExtResource( 9 )
+cell_size = Vector2( 16, 16 )
+cell_tile_origin = 1
+cell_y_sort = true
+collision_layer = 4
+collision_mask = 3
+format = 1
+tile_data = PoolIntArray( 1, 12, 0, 2, 23, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 23, 0, 8, 13, 0, 11, 12, 0, 12, 23, 0, 13, 1, 0, 14, 1, 0, 15, 1, 0, 16, 1, 0, 17, 23, 0, 18, 13, 0, 65539, 10, 0, 65540, 4, 0, 65541, 4, 0, 65542, 4, 0, 65545, 0, 0, 65546, 2, 0, 65549, 4, 0, 65550, 4, 0, 65551, 4, 0, 65552, 4, 0, 131073, 17, 0, 131080, 21, 0, 131081, 4, 0, 131082, 4, 0, 131083, 18, 0, 131090, 20, 0, 196609, 17, 0, 196626, 20, 0, 262145, 17, 0, 262162, 20, 0, 327681, 17, 0, 327698, 20, 0, 393217, 14, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0, 393222, 0, 0, 393223, 13, 0, 393228, 12, 0, 393229, 1, 0, 393230, 1, 0, 393231, 1, 0, 393232, 1, 0, 393233, 1, 0, 393234, 15, 0, 458754, 4, 0, 458755, 4, 0, 458756, 4, 0, 458757, 4, 0, 458758, 11, 0, 458765, 4, 0, 458766, 4, 0, 458767, 4, 0, 458768, 4, 0, 458769, 4, 0, 524289, 12, 0, 524290, 23, 0, 524291, 1, 0, 524292, 1, 0, 524293, 1, 0, 524294, 1, 0, 524295, 15, 0, 524300, 14, 0, 524301, 1, 0, 524302, 1, 0, 524303, 1, 0, 524304, 1, 0, 524305, 23, 0, 524306, 13, 0, 589827, 4, 0, 589828, 4, 0, 589829, 4, 0, 589838, 4, 0, 589839, 4, 0, 589840, 4, 0, 655361, 17, 0, 655378, 20, 0, 720897, 17, 0, 720914, 20, 0, 786433, 14, 0, 786434, 1, 0, 786435, 1, 0, 786436, 1, 0, 786437, 1, 0, 786438, 1, 0, 786439, 1, 0, 786440, 1, 0, 786441, 1, 0, 786442, 1, 0, 786443, 1, 0, 786444, 1, 0, 786445, 1, 0, 786446, 1, 0, 786447, 1, 0, 786448, 1, 0, 786449, 1, 0, 786450, 15, 0, 851970, 4, 0, 851971, 4, 0, 851972, 4, 0, 851973, 4, 0, 851974, 4, 0, 851975, 4, 0, 851976, 4, 0, 851977, 4, 0, 851978, 4, 0, 851979, 4, 0, 851980, 4, 0, 851981, 4, 0, 851982, 4, 0, 851983, 4, 0, 851984, 4, 0, 851985, 4, 0, 1441797, 1, 0 )
+
+[node name="PlayerNodeCutScene" parent="YSort" instance=ExtResource( 7 )]
+position = Vector2( 160, 166 )
+
+[node name="DumbWizzard-CutScene" parent="YSort" instance=ExtResource( 12 )]
+visible = false
+position = Vector2( 263, 67 )
+scale = Vector2( -1, 1 )
+
+[node name="CrateSmall2" parent="YSort" instance=ExtResource( 3 )]
+position = Vector2( 32, 32 )
+
+[node name="CrateBig" parent="YSort" instance=ExtResource( 4 )]
+position = Vector2( 48, 48 )
+
+[node name="Barrel" parent="YSort" instance=ExtResource( 5 )]
+position = Vector2( 272, 96 )
+
+[node name="Barrel2" parent="YSort" instance=ExtResource( 5 )]
+position = Vector2( 256, 96 )
+
+[node name="DiningTable" parent="YSort" instance=ExtResource( 14 )]
+position = Vector2( 48, 176 )
+
+[node name="DiningTable2" parent="YSort" instance=ExtResource( 14 )]
+position = Vector2( 240, 176 )
+
+[node name="Bookself" parent="YSort" instance=ExtResource( 13 )]
+position = Vector2( 272, 48 )
+
+[node name="Bookself2" parent="YSort" instance=ExtResource( 13 )]
+position = Vector2( 256, 48 )
+
+[node name="Bookself3" parent="YSort" instance=ExtResource( 13 )]
+position = Vector2( 240, 48 )
+
+[node name="Flags" type="YSort" parent="YSort"]
+
+[node name="FlagObject" parent="YSort/Flags" instance=ExtResource( 6 )]
+position = Vector2( 104, 152 )
+
+[node name="FlagObject2" parent="YSort/Flags" instance=ExtResource( 6 )]
+position = Vector2( 216, 152 )
+
+[node name="WorldLighting" type="Node2D" parent="."]
+
+[node name="Torch" parent="WorldLighting" instance=ExtResource( 2 )]
+position = Vector2( 80, 24 )
+
+[node name="Torch2" parent="WorldLighting" instance=ExtResource( 2 )]
+position = Vector2( 240, 24 )
+
+[node name="Torch3" parent="WorldLighting" instance=ExtResource( 2 )]
+position = Vector2( 160, 40 )
+
+[node name="Torch4" parent="WorldLighting" instance=ExtResource( 2 )]
+position = Vector2( 64, 151 )
+
+[node name="Torch5" parent="WorldLighting" instance=ExtResource( 2 )]
+position = Vector2( 256, 151 )
+
+[node name="CutSceneCamera" type="Camera2D" parent="."]
+position = Vector2( 160, 166 )
+current = true
+
+[editable path="YSort/PlayerNodeCutScene"]

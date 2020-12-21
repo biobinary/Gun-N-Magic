@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://assets/TileSet/full spritesheet.png" type="Texture" id=1]
+[ext_resource path="res://assets/Effect/Light/LightEffect.png" type="Texture" id=2]
+[ext_resource path="res://src/WorldObjects-Decoration/Torch/Script/TorchScript.gd" type="Script" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 112, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 144, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 160, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 176, 48, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "DefaultAnimation",
+"speed": 5.0
+} ]
+
+[node name="Torch" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="TorchAnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 7 )
+animation = "DefaultAnimation"
+frame = 4
+playing = true
+
+[node name="TorchLight" type="Light2D" parent="."]
+texture = ExtResource( 2 )
+texture_scale = 2.0
+color = Color( 0.541176, 0.290196, 0.14902, 1 )
+energy = 1.25
+shadow_enabled = true
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+visible = false
+rect = Rect2( -64, -64, 128, 128 )
+[connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

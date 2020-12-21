@@ -1,0 +1,747 @@
+[gd_scene load_steps=40 format=2]
+
+[ext_resource path="res://assets/TileSet/TileSet/FloorTileSet.tres" type="TileSet" id=1]
+[ext_resource path="res://assets/TileSet/TileSet/WallTileSet.tres" type="TileSet" id=2]
+[ext_resource path="res://src/WorldObjects-Decoration/Torch/Torch.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/WorldObjects-Decoration/WaterFountains/WaterFountainRed.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/WorldObjects-Decoration/Barrel/Barrel.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/WorldObjects-Decoration/Table/DiningTable.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/Player/PlayerNode-CutScene.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/PlayerWeapons/WeaponFour.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/PlayerWeapons/Bullet/Bullet.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/TileSet/full spritesheet.png" type="Texture" id=10]
+[ext_resource path="res://src/Wizard/DumbWizzardNode.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/WizzardWeapons/WizzardProjectile.tscn" type="PackedScene" id=12]
+[ext_resource path="res://assets/Sound/Misc/Explosion9.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/FontData/ThaleahFat.ttf" type="DynamicFontData" id=14]
+
+[sub_resource type="Environment" id=1]
+background_mode = 4
+ssao_intensity = 2.0
+glow_enabled = true
+glow_levels/1 = true
+glow_strength = 0.5
+glow_blend_mode = 0
+glow_bicubic_upscale = true
+adjustment_enabled = true
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.442308 ), 2.40472, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=10]
+curve = SubResource( 9 )
+
+[sub_resource type="ParticlesMaterial" id=11]
+resource_local_to_scene = true
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 20.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+initial_velocity_random = 1.0
+angular_velocity = 40.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 45.0
+angle_random = 1.0
+scale = 4.0
+scale_random = 1.0
+scale_curve = SubResource( 10 )
+color = Color( 0.729412, 0.729412, 0.729412, 1 )
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform float whitening;
+
+void fragment() {
+    vec4 texture_color = texture(TEXTURE, UV);
+    COLOR = vec4(mix(texture_color.rgb, vec3(1,1,1), whitening), texture_color.a);
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = SubResource( 7 )
+shader_param/whitening = 0.0
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=13]
+
+[sub_resource type="Animation" id=14]
+resource_name = "Hurt"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/path = NodePath("../SpriteContainer/WizzardSprite:material:shader_param/whitening")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 1.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=15]
+resource_name = "Dead"
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/HealthBarNode:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/WizzardSprite:material:shader_param/whitening")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("SpriteContainer/MagicWand/LightEffect:enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("CollisionShape2D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("HurtBox/CollisionShape2D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_do_decrease_enemy"
+} ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("ExplosionParticles:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/7/type = "audio"
+tracks/7/path = NodePath("AudioNodes/ExplosionSoundEffect")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 13 )
+} ],
+"times": PoolRealArray( 0.5 )
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("SpriteContainer:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=16]
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/ShadowSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 1, 1 ), Vector2( 1.1, 1 ), Vector2( 1.2, 1 ), Vector2( 1.1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/WizzardSprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 128, 160, 16, 32 ), Rect2( 144, 160, 16, 32 ), Rect2( 160, 160, 16, 32 ), Rect2( 176, 160, 16, 32 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("SpriteContainer/WizzardSprite:normal_map:region")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 128, 160, 16, 32 ), Rect2( 144, 160, 16, 32 ), Rect2( 160, 160, 16, 32 ), Rect2( 176, 160, 16, 32 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SpriteContainer/MagicWand:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 5, -1 ), Vector2( 5, 0 ), Vector2( 5, 1 ), Vector2( 5, 0 ) ]
+}
+
+[sub_resource type="Animation" id=17]
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/ShadowSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 1.15, 1 ), Vector2( 1, 1 ), Vector2( 1.15, 1 ), Vector2( 1.3, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/WizzardSprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 192, 160, 16, 32 ), Rect2( 208, 160, 16, 32 ), Rect2( 224, 160, 16, 32 ), Rect2( 240, 160, 16, 32 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("SpriteContainer/WizzardSprite:normal_map:region")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 192, 160, 16, 32 ), Rect2( 208, 160, 16, 32 ), Rect2( 224, 160, 16, 32 ), Rect2( 240, 160, 16, 32 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SpriteContainer/MagicWand:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 5, 0 ), Vector2( 5, -1 ), Vector2( 5, 0 ), Vector2( 5, 1 ) ]
+}
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=18]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.481633, 1 )
+colors = PoolColorArray( 1, 0.796078, 0.243137, 1, 1, 0.556863, 0.180392, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 1 ), 0.0, -1.0, 0, 1, Vector2( 1, 0 ), -2.61253, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+resource_local_to_scene = true
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 15.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 30.0
+angular_velocity = 20.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 45.0
+angle_random = 0.5
+scale = 6.0
+scale_random = 1.0
+scale_curve = SubResource( 5 )
+color_ramp = SubResource( 3 )
+
+[sub_resource type="Gradient" id=19]
+colors = PoolColorArray( 1, 0.306152, 0.09375, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=20]
+gradient = SubResource( 19 )
+
+[sub_resource type="Curve" id=21]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.153846 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=22]
+curve = SubResource( 21 )
+
+[sub_resource type="ParticlesMaterial" id=23]
+flag_disable_z = true
+spread = 15.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+initial_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 6.0
+scale_random = 1.0
+scale_curve = SubResource( 22 )
+color_ramp = SubResource( 20 )
+
+[sub_resource type="Animation" id=24]
+tracks/0/type = "value"
+tracks/0/path = NodePath("ExplosionEffect/ExplosionSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 96, 32, 16, 16 ), Rect2( 112, 32, 16, 16 ), Rect2( 128, 32, 16, 16 ), Rect2( 144, 32, 16, 16 ), Rect2( 240, 32, 16, 16 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ExplosionEffect/ExplosionSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 2.79397e-07 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("GlowNode/BulletSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 2.79397e-07 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("GlowNode/BulletParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 2.79397e-07 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.983029 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "queue_free"
+} ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("HitBox/CollisionShape2D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[sub_resource type="ShaderMaterial" id=26]
+resource_local_to_scene = true
+shader = SubResource( 7 )
+shader_param/whitening = 1.0
+
+[sub_resource type="DynamicFont" id=25]
+size = 64
+outline_size = 3
+font_data = ExtResource( 14 )
+
+[node name="GameThumbnail" type="Node2D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 1 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color( 0.513726, 0.513726, 0.513726, 1 )
+
+[node name="FloorTileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 196616, 0, 0, 196617, 0, 0, 196618, 0, 0, 196619, 0, 0, 196620, 0, 0, 196621, 0, 0, 196622, 0, 0, 196623, 0, 0, 196624, 0, 0, 196625, 0, 0, 196626, 0, 0, 196627, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 4, 0, 262151, 0, 0, 262152, 4, 0, 262153, 0, 0, 262154, 0, 0, 262155, 0, 0, 262156, 0, 0, 262157, 0, 0, 262158, 0, 0, 262159, 0, 0, 262160, 0, 0, 262161, 0, 0, 262162, 0, 0, 262163, 0, 0, 327680, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 0, 0, 327686, 4, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 327691, 0, 0, 327692, 5, 0, 327693, 0, 0, 327694, 0, 0, 327695, 0, 0, 327696, 0, 0, 327697, 0, 0, 327698, 0, 0, 327699, 0, 0, 393216, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0, 393222, 0, 0, 393223, 0, 0, 393224, 0, 0, 393225, 1, 0, 393226, 0, 0, 393227, 0, 0, 393228, 0, 0, 393229, 0, 0, 393230, 0, 0, 393231, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0, 393235, 0, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 6, 0, 458766, 7, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458771, 0, 0, 524288, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 0, 0, 524292, 4, 0, 524293, 0, 0, 524294, 0, 0, 524295, 0, 0, 524296, 0, 0, 524297, 0, 0, 524298, 0, 0, 524299, 0, 0, 524300, 0, 0, 524301, 0, 0, 524302, 0, 0, 524303, 0, 0, 524304, 0, 0, 524305, 0, 0, 524306, 0, 0, 524307, 0, 0, 589824, 0, 0, 589825, 0, 0, 589826, 0, 0, 589827, 0, 0, 589828, 0, 0, 589829, 0, 0, 589830, 6, 0, 589831, 0, 0, 589832, 0, 0, 589833, 0, 0, 589834, 4, 0, 589835, 0, 0, 589836, 0, 0, 589837, 0, 0, 589838, 0, 0, 589839, 0, 0, 589840, 0, 0, 589841, 0, 0, 589842, 0, 0, 589843, 0, 0, 655360, 0, 0, 655361, 0, 0, 655362, 0, 0, 655363, 0, 0, 655364, 0, 0, 655365, 0, 0, 655366, 0, 0, 655367, 0, 0, 655368, 0, 0, 655369, 0, 0, 655370, 0, 0, 655371, 0, 0, 655372, 0, 0, 655373, 0, 0, 655374, 0, 0, 655375, 0, 0, 655376, 0, 0, 655377, 0, 0, 655378, 0, 0, 655379, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720901, 0, 0, 720902, 0, 0, 720903, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 720909, 0, 0, 720910, 0, 0, 720911, 0, 0, 720912, 0, 0, 720913, 0, 0, 720914, 0, 0, 720915, 0, 0 )
+
+[node name="WallTileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 23, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65547, 1, 0, 65548, 1, 0, 65549, 1, 0, 65550, 23, 0, 65551, 1, 0, 65552, 1, 0, 65553, 1, 0, 65554, 1, 0, 65555, 1, 0, 131072, 4, 0, 131073, 4, 0, 131074, 4, 0, 131075, 4, 0, 131076, 4, 0, 131078, 4, 0, 131079, 4, 0, 131080, 4, 0, 131083, 4, 0, 131084, 4, 0, 131085, 10, 0, 131087, 4, 0, 131088, 4, 0, 131089, 4, 0, 131090, 4, 0, 131091, 4, 0, 327693, 22, 0, 458758, 22, 0, 720897, 2, 0, 720898, 2, 0, 720899, 2, 0, 720900, 2, 0, 720901, 2, 0, 720902, 2, 0, 720903, 2, 0, 720904, 2, 0, 720905, 2, 0, 720906, 2, 0, 720907, 2, 0, 720908, 2, 0, 720909, 2, 0, 720910, 2, 0, 720911, 2, 0, 720912, 2, 0, 720913, 2, 0, 720914, 2, 0, 720915, 2, 0, 720916, 2, 0, 786433, 4, 0, 786434, 4, 0, 786435, 4, 0, 786436, 4, 0, 786437, 4, 0, 786438, 4, 0, 786439, 4, 0, 786440, 4, 0, 786441, 4, 0, 786442, 4, 0, 786443, 4, 0, 786444, 4, 0, 786445, 4, 0, 786446, 4, 0, 786447, 4, 0, 786448, 4, 0, 786449, 4, 0, 786450, 4, 0, 786451, 4, 0, 786452, 4, 0 )
+
+[node name="PlayerNodeCutScene" parent="." instance=ExtResource( 7 )]
+position = Vector2( 131, 100 )
+
+[node name="ShadowEffect" parent="PlayerNodeCutScene/SpriteContainer" index="0"]
+position = Vector2( 0, 18 )
+
+[node name="PlayerSprite" parent="PlayerNodeCutScene/SpriteContainer" index="2"]
+region_rect = Rect2( 208, 96, 16, 32 )
+
+[node name="MovingObjects" parent="PlayerNodeCutScene" index="1"]
+position = Vector2( 0, 6.8 )
+
+[node name="WeaponFour" parent="PlayerNodeCutScene/MovingObjects/WeaponHolder" index="0" instance=ExtResource( 8 )]
+rotation = -0.505137
+script = null
+
+[node name="PlayerAnimation" parent="PlayerNodeCutScene" index="2"]
+autoplay = ""
+
+[node name="DumbWizzardNode" parent="." instance=ExtResource( 11 )]
+position = Vector2( 238.704, 59.151 )
+scale = Vector2( -1, 1 )
+script = null
+
+[node name="HealthBarNode" parent="DumbWizzardNode/SpriteContainer" index="0"]
+visible = false
+script = null
+
+[node name="ShadowSprite" parent="DumbWizzardNode/SpriteContainer" index="1"]
+scale = Vector2( 1, 1 )
+
+[node name="DustParticles" parent="DumbWizzardNode/SpriteContainer" index="2"]
+process_material = SubResource( 11 )
+
+[node name="WizzardSprite" parent="DumbWizzardNode/SpriteContainer" index="3"]
+material = SubResource( 12 )
+region_rect = Rect2( 128, 160, 16, 32 )
+
+[node name="MagicWand" parent="DumbWizzardNode/SpriteContainer" index="4"]
+position = Vector2( 5, -1 )
+
+[node name="AnimationTree" parent="DumbWizzardNode" index="8"]
+parameters/playback = SubResource( 13 )
+
+[node name="DumbWizzardNode2" parent="." instance=ExtResource( 11 )]
+position = Vector2( 219.454, 136.651 )
+scale = Vector2( -1, 1 )
+script = null
+
+[node name="HealthBarNode" parent="DumbWizzardNode2/SpriteContainer" index="0"]
+visible = false
+script = null
+
+[node name="ShadowSprite" parent="DumbWizzardNode2/SpriteContainer" index="1"]
+scale = Vector2( 1, 1 )
+
+[node name="DustParticles" parent="DumbWizzardNode2/SpriteContainer" index="2"]
+process_material = SubResource( 11 )
+
+[node name="WizzardSprite" parent="DumbWizzardNode2/SpriteContainer" index="3"]
+material = SubResource( 12 )
+region_rect = Rect2( 128, 160, 16, 32 )
+
+[node name="MagicWand" parent="DumbWizzardNode2/SpriteContainer" index="4"]
+position = Vector2( 5, -1 )
+rotation = 0.613115
+
+[node name="MagicWandSprite" parent="DumbWizzardNode2/SpriteContainer/MagicWand" index="0"]
+position = Vector2( 5.08549, -0.220078 )
+rotation = 0.24399
+
+[node name="LightEffect" parent="DumbWizzardNode2/SpriteContainer/MagicWand" index="2"]
+position = Vector2( 7.76115, -10.7799 )
+
+[node name="MagicWandParticles" parent="DumbWizzardNode2/SpriteContainer/MagicWand" index="3"]
+position = Vector2( 7.76115, -10.7799 )
+
+[node name="CollisionShape2D" parent="DumbWizzardNode2/HurtBox" index="0"]
+disabled = true
+
+[node name="HurtAnimation" parent="DumbWizzardNode2/HurtBox" index="1"]
+anims/Hurt = SubResource( 14 )
+
+[node name="CollisionShape2D" parent="DumbWizzardNode2" index="5"]
+disabled = true
+
+[node name="WizardAnimation" parent="DumbWizzardNode2" index="7"]
+anims/Dead = SubResource( 15 )
+anims/IdleAnimation = SubResource( 16 )
+anims/WalkingAnimation = SubResource( 17 )
+
+[node name="AnimationTree" parent="DumbWizzardNode2" index="8"]
+active = false
+parameters/playback = SubResource( 18 )
+
+[node name="Bullet" parent="." instance=ExtResource( 9 )]
+position = Vector2( 167, 84.5612 )
+rotation = -0.555818
+
+[node name="BulletParticles" parent="Bullet/GlowNode" index="1"]
+amount = 3
+process_material = SubResource( 6 )
+
+[node name="BulletTrail" parent="Bullet/BulletTrail" index="0"]
+points = PoolVector2Array( -29.3971, 0.899841, 0, -3.05176e-05 )
+script = null
+
+[node name="WizzardProjectile" parent="." instance=ExtResource( 12 )]
+position = Vector2( 196.879, 69.5327 )
+rotation = 2.57167
+scale = Vector2( 1, -1 )
+
+[node name="BulletParticles" parent="WizzardProjectile/GlowNode" index="1"]
+visible = false
+
+[node name="Particles2D" type="Particles2D" parent="WizzardProjectile/GlowNode" index="2"]
+position = Vector2( -0.389374, -0.383179 )
+rotation = -3.14159
+lifetime = 0.75
+process_material = SubResource( 23 )
+
+[node name="WizzardProjectile2" parent="." instance=ExtResource( 12 )]
+position = Vector2( 179.588, 116.895 )
+rotation = 3.80613
+scale = Vector2( 1, -1 )
+
+[node name="BulletParticles" parent="WizzardProjectile2/GlowNode" index="1"]
+visible = false
+
+[node name="Particles2D" type="Particles2D" parent="WizzardProjectile2/GlowNode" index="2"]
+position = Vector2( -0.389374, -0.383179 )
+rotation = -3.14159
+lifetime = 0.75
+process_material = SubResource( 23 )
+
+[node name="BulletAnimation" parent="WizzardProjectile2" index="4"]
+anims/Destroyed = SubResource( 24 )
+
+[node name="RandomNodes" type="Node2D" parent="."]
+
+[node name="WaterFountainBlue" parent="RandomNodes" instance=ExtResource( 4 )]
+position = Vector2( 144, 32 )
+
+[node name="WaterFountainBlue2" parent="RandomNodes" instance=ExtResource( 4 )]
+position = Vector2( 160, 32 )
+
+[node name="Barrel" parent="RandomNodes" instance=ExtResource( 5 )]
+position = Vector2( 112, 128 )
+
+[node name="BarrelSprite" parent="RandomNodes/Barrel/StaticBody2D" index="0"]
+material = SubResource( 26 )
+
+[node name="CollisionShape2D" parent="RandomNodes/Barrel/StaticBody2D" index="2"]
+disabled = true
+
+[node name="CollisionShape2D" parent="RandomNodes/Barrel/HurtBox" index="0"]
+disabled = true
+
+[node name="Barrel2" parent="RandomNodes" instance=ExtResource( 5 )]
+position = Vector2( 192, 96 )
+
+[node name="DiningTable" parent="RandomNodes" instance=ExtResource( 6 )]
+position = Vector2( 64, 64 )
+
+[node name="DiningTable2" parent="RandomNodes" instance=ExtResource( 6 )]
+position = Vector2( 208, 160 )
+
+[node name="Sprite" type="Sprite" parent="RandomNodes"]
+position = Vector2( 123.499, 130.026 )
+texture = ExtResource( 10 )
+region_enabled = true
+region_rect = Rect2( 112, 32, 16, 16 )
+
+[node name="DustSprites" type="Node2D" parent="RandomNodes"]
+
+[node name="Sprite4" type="Sprite" parent="RandomNodes/DustSprites"]
+self_modulate = Color( 0.729412, 0.729412, 0.729412, 0.627451 )
+position = Vector2( 117, 109 )
+rotation = 2.4142
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 10 )
+region_enabled = true
+region_rect = Rect2( 101.922, 37.7831, 4.88346, 4.36941 )
+
+[node name="Sprite5" type="Sprite" parent="RandomNodes/DustSprites"]
+self_modulate = Color( 0.729412, 0.729412, 0.729412, 0.627451 )
+position = Vector2( 121, 110 )
+rotation = 1.75771
+texture = ExtResource( 10 )
+region_enabled = true
+region_rect = Rect2( 101.922, 37.7831, 4.88346, 4.36941 )
+
+[node name="Sprite6" type="Sprite" parent="RandomNodes/DustSprites"]
+self_modulate = Color( 0.729412, 0.729412, 0.729412, 0.627451 )
+position = Vector2( 116, 105 )
+rotation = 1.75771
+scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 10 )
+region_enabled = true
+region_rect = Rect2( 101.922, 37.7831, 4.88346, 4.36941 )
+
+[node name="Sprite7" type="Sprite" parent="RandomNodes/DustSprites"]
+self_modulate = Color( 0.729412, 0.729412, 0.729412, 0.627451 )
+position = Vector2( 112, 107 )
+rotation = 3.00482
+scale = Vector2( 0.6, 0.6 )
+texture = ExtResource( 10 )
+region_enabled = true
+region_rect = Rect2( 101.922, 37.7831, 4.88346, 4.36941 )
+
+[node name="Sprite8" type="Sprite" parent="RandomNodes/DustSprites"]
+self_modulate = Color( 0.729412, 0.729412, 0.729412, 0.627451 )
+position = Vector2( 112, 103 )
+rotation = 3.00482
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 10 )
+region_enabled = true
+region_rect = Rect2( 101.922, 37.7831, 4.88346, 4.36941 )
+
+[node name="TorchNodes" type="Node2D" parent="."]
+
+[node name="Torch" parent="TorchNodes" instance=ExtResource( 3 )]
+position = Vector2( 72, 40 )
+
+[node name="Torch3" parent="TorchNodes" instance=ExtResource( 3 )]
+position = Vector2( 216, 104 )
+
+[node name="Torch4" parent="TorchNodes" instance=ExtResource( 3 )]
+position = Vector2( 104, 136 )
+
+[node name="Torch2" parent="TorchNodes" instance=ExtResource( 3 )]
+position = Vector2( 248, 40 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 178, 100 )
+current = true
+zoom = Vector2( 0.5, 0.5 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -170.0
+margin_top = -29.5
+margin_right = 170.0
+margin_bottom = 29.5
+custom_fonts/font = SubResource( 25 )
+custom_colors/font_color = Color( 0.87451, 0.6, 0.439216, 1 )
+custom_colors/font_outline_modulate = Color( 0.215686, 0.207843, 0.207843, 1 )
+text = "Gun Vs Magic"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[editable path="PlayerNodeCutScene"]
+
+[editable path="DumbWizzardNode"]
+
+[editable path="DumbWizzardNode2"]
+
+[editable path="Bullet"]
+
+[editable path="Bullet/BulletTrail"]
+
+[editable path="WizzardProjectile"]
+
+[editable path="WizzardProjectile2"]
+
+[editable path="RandomNodes/Barrel"]

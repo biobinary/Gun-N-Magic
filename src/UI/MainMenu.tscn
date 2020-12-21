@@ -1,0 +1,236 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://assets/FontData/ThaleahFat.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/TileSet/frames/weapon_red_magic_staff.png" type="Texture" id=2]
+[ext_resource path="res://assets/Weapons/US.png" type="Texture" id=3]
+[ext_resource path="res://src/UI/MenuButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/UI/Script/MainMenuScript.gd" type="Script" id=5]
+[ext_resource path="res://assets/Sound/UI/click_005.wav" type="AudioStream" id=6]
+[ext_resource path="res://assets/Background/parallax-space-stars.png" type="Texture" id=7]
+[ext_resource path="res://assets/Sound/UI/glass_002.wav" type="AudioStream" id=8]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+// An input into the shader from our game code.
+// Ranges from 0 to 1 over the course of the transition.
+// We use this to actually animate the shader.
+uniform float progress : hint_range(0, 1);
+
+// Size of each diamond, in pixels.
+uniform float diamondPixelSize = 10f;
+
+void fragment() {
+    float xFraction = fract(FRAGCOORD.x / diamondPixelSize);
+    float yFraction = fract(FRAGCOORD.y / diamondPixelSize);
+    if (xFraction + yFraction > progress * 2f) {
+        discard;
+    }
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/progress = 1.0
+shader_param/diamondPixelSize = 20.0
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+outline_size = 1
+font_data = ExtResource( 1 )
+
+[sub_resource type="Animation" id=4]
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("../GunSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 88, 81 ), Vector2( 88, 79 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../MagicWandSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 235, 81 ), Vector2( 235, 83 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "Close"
+tracks/0/type = "value"
+tracks/0/path = NodePath("../TransitionLayer/ColorRect:mouse_filter")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../TransitionLayer/ColorRect:material:shader_param/progress")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=6]
+tracks/0/type = "value"
+tracks/0/path = NodePath("../TransitionLayer/ColorRect:mouse_filter")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 2 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../TransitionLayer/ColorRect:material:shader_param/progress")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0 ]
+}
+
+[node name="MainMenu" type="Node2D"]
+pause_mode = 2
+script = ExtResource( 5 )
+
+[node name="MagicWandSprite" type="Sprite" parent="."]
+position = Vector2( 235, 81 )
+rotation = -0.523599
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+
+[node name="GunSprite" type="Sprite" parent="."]
+position = Vector2( 88, 81 )
+rotation = -0.523599
+scale = Vector2( 2.25, 2.25 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 67, 3, 25, 9 )
+
+[node name="ParralaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParralaxBackground"]
+motion_mirroring = Vector2( 512, 288 )
+
+[node name="parallax-space-stars" type="Sprite" parent="ParralaxBackground/ParallaxLayer"]
+position = Vector2( 256, 144 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 512, 288 )
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="ColorRect" type="ColorRect" parent="TransitionLayer"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Control" type="Control" parent="UILayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -85.0
+margin_top = -39.0
+margin_right = 85.0
+margin_bottom = 39.0
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UILayer/Control/VBoxContainer"]
+margin_right = 170.0
+margin_bottom = 30.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.772549, 0.376471, 0.145098, 1 )
+custom_colors/font_outline_modulate = Color( 0.560784, 0.25098, 0.160784, 1 )
+text = "Gun vs magic"
+
+[node name="Play" parent="UILayer/Control/VBoxContainer" instance=ExtResource( 4 )]
+margin_top = 35.0
+margin_right = 170.0
+margin_bottom = 51.0
+text = "Play"
+
+[node name="Quit" parent="UILayer/Control/VBoxContainer" instance=ExtResource( 4 )]
+margin_top = 56.0
+margin_right = 170.0
+margin_bottom = 72.0
+size_flags_horizontal = 1
+text = "Quit"
+
+[node name="MainMenuCamera" type="Camera2D" parent="."]
+position = Vector2( 160, 120 )
+current = true
+
+[node name="AnimationNode" type="Node" parent="."]
+
+[node name="MenuIdleAnimation" type="AnimationPlayer" parent="AnimationNode"]
+autoplay = "Idle"
+anims/Idle = SubResource( 4 )
+
+[node name="TransitionAnimation" type="AnimationPlayer" parent="AnimationNode"]
+anims/Close = SubResource( 5 )
+anims/Open = SubResource( 6 )
+
+[node name="SoundNodes" type="Node" parent="."]
+
+[node name="MouseHoverSound" type="AudioStreamPlayer" parent="SoundNodes"]
+stream = ExtResource( 6 )
+volume_db = -5.0
+
+[node name="ClickSoundEffect" type="AudioStreamPlayer" parent="SoundNodes"]
+stream = ExtResource( 8 )
+volume_db = -5.0
+[connection signal="mouse_entered" from="UILayer/Control/VBoxContainer/Play" to="." method="_on_Play_mouse_entered"]
+[connection signal="pressed" from="UILayer/Control/VBoxContainer/Play" to="." method="_on_Play_pressed"]
+[connection signal="mouse_entered" from="UILayer/Control/VBoxContainer/Quit" to="." method="_on_Quit_mouse_entered"]
+[connection signal="pressed" from="UILayer/Control/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="animation_finished" from="AnimationNode/TransitionAnimation" to="." method="_on_TransitionAnimation_animation_finished"]

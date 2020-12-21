@@ -1,0 +1,239 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://src/World/Script/WorldScript.gd" type="Script" id=1]
+[ext_resource path="res://assets/FontData/ThaleahFat.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://src/UI/Script/DeadMenuScript.gd" type="Script" id=3]
+[ext_resource path="res://assets/Sound/UI/click_005.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/Sound/UI/glass_002.wav" type="AudioStream" id=5]
+[ext_resource path="res://src/UI/MenuButton.tscn" type="PackedScene" id=6]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+// An input into the shader from our game code.
+// Ranges from 0 to 1 over the course of the transition.
+// We use this to actually animate the shader.
+uniform float progress : hint_range(0, 1);
+
+// Size of each diamond, in pixels.
+uniform float diamondPixelSize = 10f;
+
+void fragment() {
+    float xFraction = fract(FRAGCOORD.x / diamondPixelSize);
+    float yFraction = fract(FRAGCOORD.y / diamondPixelSize);
+    
+    float xDistance = abs(xFraction - 0.5);
+    float yDistance = abs(yFraction - 0.5);
+    
+    if (xDistance + yDistance + UV.x + UV.y > progress * 4f) {
+        discard;
+    }
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/progress = 1.0
+shader_param/diamondPixelSize = 20.0
+
+[sub_resource type="Animation" id=3]
+resource_name = "Close"
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:material:shader_param/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ColorRect:mouse_filter")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Open"
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:material:shader_param/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ColorRect:mouse_filter")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 2 ]
+}
+
+[sub_resource type="ParticlesMaterial" id=5]
+emission_shape = 2
+emission_box_extents = Vector3( 320, 1, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, 98, 0 )
+angular_velocity = 50.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 45.0
+angle_random = 1.0
+scale = 2.0
+scale_random = 1.0
+color = Color( 0.854902, 0.305882, 0.219608, 1 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.666667, 0.552941, 0.478431, 1 )
+border_width_bottom = 1
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 10
+shadow_color = Color( 0.992157, 0.968627, 0.929412, 1 )
+shadow_size = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.666667, 0.552941, 0.478431, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 9
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.666667, 0.552941, 0.478431, 1 )
+border_width_bottom = 1
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 9
+shadow_color = Color( 0.992157, 0.968627, 0.929412, 1 )
+anti_aliasing = false
+
+[sub_resource type="DynamicFont" id=10]
+font_data = ExtResource( 2 )
+
+[node name="DeadMenu" type="Node2D"]
+pause_mode = 2
+script = ExtResource( 1 )
+next_scene = "res://src/UI/MainMenu.tscn"
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="ColorRect" type="ColorRect" parent="TransitionLayer"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionLayer"]
+anims/Close = SubResource( 3 )
+anims/Open = SubResource( 4 )
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Particles2D" type="Particles2D" parent="UILayer"]
+position = Vector2( 160, 0 )
+amount = 15
+lifetime = 3.0
+process_material = SubResource( 5 )
+
+[node name="Control" type="Control" parent="UILayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SoundEffect" type="Node" parent="UILayer/Control"]
+
+[node name="MouseHoverSoundEffect" type="AudioStreamPlayer" parent="UILayer/Control/SoundEffect"]
+stream = ExtResource( 4 )
+volume_db = -5.0
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="UILayer/Control/SoundEffect"]
+stream = ExtResource( 5 )
+volume_db = -5.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -70.0
+margin_top = -23.5
+margin_right = 70.0
+margin_bottom = 23.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Header" type="Label" parent="UILayer/Control/VBoxContainer"]
+margin_right = 140.0
+margin_bottom = 22.0
+custom_fonts/font = SubResource( 6 )
+custom_colors/font_color = Color( 0.854902, 0.305882, 0.219608, 1 )
+text = "you have died"
+align = 1
+valign = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/Control/VBoxContainer"]
+margin_top = 26.0
+margin_right = 140.0
+margin_bottom = 42.0
+
+[node name="Restart" parent="UILayer/Control/VBoxContainer/HBoxContainer" instance=ExtResource( 6 )]
+
+[node name="Exit" type="Button" parent="UILayer/Control/VBoxContainer/HBoxContainer"]
+margin_left = 72.0
+margin_right = 140.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+custom_styles/hover = SubResource( 7 )
+custom_styles/pressed = SubResource( 8 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
+custom_colors/font_color = Color( 0.992157, 0.968627, 0.929412, 1 )
+text = "Exit"
+[connection signal="mouse_entered" from="UILayer/Control/VBoxContainer/HBoxContainer/Restart" to="UILayer/Control" method="_on_Restart_mouse_entered"]
+[connection signal="pressed" from="UILayer/Control/VBoxContainer/HBoxContainer/Restart" to="UILayer/Control" method="_on_Restart_pressed"]
+[connection signal="mouse_entered" from="UILayer/Control/VBoxContainer/HBoxContainer/Exit" to="UILayer/Control" method="_on_Exit_mouse_entered"]
+[connection signal="pressed" from="UILayer/Control/VBoxContainer/HBoxContainer/Exit" to="UILayer/Control" method="_on_Exit_pressed"]

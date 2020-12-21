@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/TileSet/0x72_DungeonTilesetII_v1.3.png" type="Texture" id=1]
+[ext_resource path="res://assets/Effect/ShadowEffect.png" type="Texture" id=5]
+
+[sub_resource type="Animation" id=1]
+resource_name = "IdleAnimation"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/ShadowSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 1, 1 ), Vector2( 1.1, 1 ), Vector2( 1.2, 1 ), Vector2( 1.1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/WizzardSprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 128, 160, 16, 32 ), Rect2( 144, 160, 16, 32 ), Rect2( 160, 160, 16, 32 ), Rect2( 176, 160, 16, 32 ) ]
+}
+
+[node name="DumbWizzard-CutScene" type="Node2D"]
+
+[node name="SpriteContainer" type="Node2D" parent="."]
+
+[node name="ShadowSprite" type="Sprite" parent="SpriteContainer"]
+self_modulate = Color( 1, 1, 1, 0.352941 )
+position = Vector2( 0, 16 )
+texture = ExtResource( 5 )
+
+[node name="WizzardSprite" type="Sprite" parent="SpriteContainer"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 128, 160, 16, 32 )
+
+[node name="WizardAnimation" type="AnimationPlayer" parent="."]
+autoplay = "IdleAnimation"
+anims/IdleAnimation = SubResource( 1 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+position = Vector2( 0, 6 )
+rect = Rect2( -17.5, -17.5, 35, 35 )

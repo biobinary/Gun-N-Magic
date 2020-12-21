@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/PlayerWeapons/Script/SMGScript.gd" type="Script" id=1]
+[ext_resource path="res://assets/Weapons/US.png" type="Texture" id=2]
+[ext_resource path="res://assets/Sound/GunSounds/M4A1_Single-Kibblesbob-8540445.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/Sound/GunSounds/Rifle-Foley-And-Reload.wav" type="AudioStream" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 36, 33, 24, 9 )
+
+[node name="WeaponFour" type="Sprite"]
+scale = Vector2( 0.7, 0.7 )
+texture = SubResource( 1 )
+offset = Vector2( 4, -1 )
+region_rect = Rect2( 36, 33, 24, 9 )
+script = ExtResource( 1 )
+FIRE_RATE = 0.3
+MAGAZINE_SIZE = 64
+RELOAD_TIME = 1.4
+GUN_SOUND = NodePath("GunSound")
+RELOAD_SOUND = NodePath("ReloadSound")
+ACCURACY = 0.9
+
+[node name="MuzzleTip" type="Position2D" parent="."]
+position = Vector2( 17.0625, -4.18879 )
+
+[node name="WeaponTimerNode" type="Node" parent="."]
+
+[node name="ReloadTimer" type="Timer" parent="WeaponTimerNode"]
+process_mode = 0
+
+[node name="GunSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+volume_db = -5.0
+
+[node name="ReloadSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+volume_db = -3.0

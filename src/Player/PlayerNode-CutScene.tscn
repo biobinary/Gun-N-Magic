@@ -1,0 +1,224 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://assets/TileSet/0x72_DungeonTilesetII_v1.3.png" type="Texture" id=1]
+[ext_resource path="res://assets/Effect/ShadowEffect.png" type="Texture" id=3]
+[ext_resource path="res://assets/NormalMap/DungeonNormalMap_n.png" type="Texture" id=7]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.442308 ), 2.40472, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 20.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+initial_velocity_random = 1.0
+angular_velocity = 40.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 45.0
+angle_random = 1.0
+scale = 4.0
+scale_random = 1.0
+scale_curve = SubResource( 2 )
+color = Color( 0.729412, 0.729412, 0.729412, 1 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 7 )
+region = Rect2( 128, 64, 16, 32 )
+
+[sub_resource type="Animation" id=5]
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/PlayerSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 128, 96, 16, 32 ), Rect2( 144, 96, 16, 32 ), Rect2( 160, 96, 16, 32 ), Rect2( 176, 96, 16, 32 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/ShadowEffect:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 16.5 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MovingObjects:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 8.5 ), Vector2( 0, 10 ), Vector2( 0, 11 ), Vector2( 0, 10 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SpriteContainer/PlayerSprite:normal_map:region")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 128, 64, 16, 32 ), Rect2( 144, 64, 16, 32 ), Rect2( 160, 64, 16, 32 ), Rect2( 176, 64, 16, 32 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+length = 0.75
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/PlayerSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.19, 0.38, 0.56 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 240, 96, 16, 32 ), Rect2( 224, 96, 16, 32 ), Rect2( 208, 96, 16, 32 ), Rect2( 192, 96, 16, 32 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/ShadowEffect:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.38 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 16.5 ), Vector2( 0, 18 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MovingObjects:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.19, 0.38, 0.56 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 8.8 ), Vector2( 0, 7.8 ), Vector2( 0, 6.8 ), Vector2( 0, 7.8 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SpriteContainer/PlayerSprite:normal_map:region")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.19, 0.38, 0.56 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 240, 64, 16, 32 ), Rect2( 224, 64, 16, 32 ), Rect2( 208, 64, 16, 32 ), Rect2( 192, 64, 16, 32 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.75
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpriteContainer/PlayerSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.19, 0.38, 0.56 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 192, 96, 16, 32 ), Rect2( 208, 96, 16, 32 ), Rect2( 224, 96, 16, 32 ), Rect2( 240, 96, 16, 32 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SpriteContainer/ShadowEffect:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.19 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 16.5 ), Vector2( 0, 18 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MovingObjects:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.19, 0.38, 0.562681 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 7.8 ), Vector2( 0, 6.8 ), Vector2( 0, 7.8 ), Vector2( 0, 8.8 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SpriteContainer/PlayerSprite:normal_map:region")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.19, 0.38, 0.56 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 192, 64, 16, 32 ), Rect2( 208, 64, 16, 32 ), Rect2( 224, 64, 16, 32 ), Rect2( 240, 64, 16, 32 ) ]
+}
+
+[node name="PlayerNodeCutScene" type="Node2D"]
+
+[node name="SpriteContainer" type="Node2D" parent="."]
+
+[node name="ShadowEffect" type="Sprite" parent="SpriteContainer"]
+self_modulate = Color( 1, 1, 1, 0.352941 )
+position = Vector2( 0, 16.5 )
+texture = ExtResource( 3 )
+
+[node name="DustParticles" type="Particles2D" parent="SpriteContainer"]
+position = Vector2( 0, 12.5154 )
+emitting = false
+lifetime = 0.5
+speed_scale = 0.2
+randomness = 1.0
+local_coords = false
+process_material = SubResource( 3 )
+
+[node name="PlayerSprite" type="Sprite" parent="SpriteContainer"]
+texture = ExtResource( 1 )
+normal_map = SubResource( 4 )
+region_enabled = true
+region_rect = Rect2( 128, 96, 16, 32 )
+
+[node name="MovingObjects" type="Node2D" parent="."]
+position = Vector2( 0, 8.5 )
+
+[node name="WeaponHolder" type="Node2D" parent="MovingObjects"]
+position = Vector2( 2, 2.5 )
+
+[node name="PlayerAnimation" type="AnimationPlayer" parent="."]
+autoplay = "IdleAnimation"
+anims/IdleAnimation = SubResource( 5 )
+anims/ReverseWalkingAnimation = SubResource( 6 )
+anims/WalkingAnimation = SubResource( 7 )
